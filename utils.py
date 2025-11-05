@@ -1,4 +1,5 @@
 """Utility functions for the desktop app"""
+from datetime import datetime
 
 def format_date(date_string):
     """Format date string to readable format"""
