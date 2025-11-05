@@ -2,19 +2,21 @@ import customtkinter as ctk
 import json
 import os
 from datetime import datetime
+from config import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, DATA_DIR, NOTES_FILE, MAX_NOTE_LENGTH
+from utils import format_date, validate_note
 
 class DesktopApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         
         # App ayarları
-        self.title("Modern Desktop App")
-        self.geometry("800x600")
+        self.title(APP_NAME)
+        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
         
         # Veri dosyası
-        self.data_file = "data/notes.json"
+        self.data_file = NOTES_FILE
         self.ensure_data_dir()
         self.notes = self.load_notes()
         
@@ -23,7 +25,7 @@ class DesktopApp(ctk.CTk):
         
     def ensure_data_dir(self):
         """Veri klasörünü oluştur"""
-        os.makedirs("data", exist_ok=True)
+        os.makedirs(DATA_DIR, exist_ok=True)
         
     def load_notes(self):
         """Notları yükle"""
@@ -95,7 +97,8 @@ class DesktopApp(ctk.CTk):
     def save_note(self):
         """Notu kaydet"""
         content = self.text_input.get("1.0", "end-1c").strip()
-        if content:
+        is_valid, error_msg = validate_note(content)
+        if is_valid:
             note = {
                 "id": len(self.notes) + 1,
                 "content": content,
@@ -105,6 +108,8 @@ class DesktopApp(ctk.CTk):
             self.save_notes()
             self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
             self.text_input.delete("1.0", "end")
+        else:
+            self.notes_label.configure(text=f"❌ {error_msg}")
     
     def clear_note(self):
         """Notu temizle"""
