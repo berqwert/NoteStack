@@ -24,3 +24,6 @@ Thumbs.db
 data/
 *.log
 
+# Python cache
+*.pyc
+.pytest_cache/
