@@ -44,9 +44,13 @@ class DesktopApp(ctk.CTk):
     
     def create_widgets(self):
         """Ana widget'ları oluştur"""
+        # Ana container
+        main_frame = ctk.CTkFrame(self)
+        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        
         # Başlık
         title = ctk.CTkLabel(
-            self,
+            main_frame,
             text="📝 Notlarım",
             font=ctk.CTkFont(size=32, weight="bold")
         )
@@ -54,14 +58,14 @@ class DesktopApp(ctk.CTk):
         
         # Not giriş alanı
         self.text_input = ctk.CTkTextbox(
-            self,
+            main_frame,
             height=200,
             font=ctk.CTkFont(size=14)
         )
         self.text_input.pack(pady=10, padx=20, fill="both", expand=True)
         
         # Butonlar frame
-        button_frame = ctk.CTkFrame(self)
+        button_frame = ctk.CTkFrame(main_frame)
         button_frame.pack(pady=10)
         
         # Kaydet butonu
@@ -88,7 +92,7 @@ class DesktopApp(ctk.CTk):
         
         # Not listesi
         self.notes_label = ctk.CTkLabel(
-            self,
+            main_frame,
             text=f"Toplam {len(self.notes)} not",
             font=ctk.CTkFont(size=14)
         )
@@ -96,7 +100,7 @@ class DesktopApp(ctk.CTk):
         
         # Footer
         footer = ctk.CTkLabel(
-            self,
+            main_frame,
             text="💡 İpucu: Notlarınız otomatik olarak kaydedilir",
             font=ctk.CTkFont(size=11),
             text_color="gray"
