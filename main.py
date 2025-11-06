@@ -1,18 +1,17 @@
-import customtkinter as ctk
+import tkinter as tk
+from tkinter import scrolledtext
 import json
+import os
 from datetime import datetime
 from config import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, DATA_DIR, NOTES_FILE, MAX_NOTE_LENGTH
-from utils import format_date, validate_note
+from utils import validate_note
 
-class DesktopApp(ctk.CTk):
+class DesktopApp:
     def __init__(self):
-        super().__init__()
-        
-        # App ayarları
-        self.title(APP_NAME)
-        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
-        ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("blue")
+        self.root = tk.Tk()
+        self.root.title(APP_NAME)
+        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        self.root.configure(bg="#1a1a1a")
         
         # Veri dosyası
         self.data_file = NOTES_FILE
@@ -43,87 +42,105 @@ class DesktopApp(ctk.CTk):
     
     def create_widgets(self):
         """Ana widget'ları oluştur"""
-        # Başlık - daha görünür yap
-        title = ctk.CTkLabel(
-            self,
+        # Başlık
+        title = tk.Label(
+            self.root,
             text="📝 Notlarım",
-            font=ctk.CTkFont(size=32, weight="bold"),
-            text_color="white"
+            font=("Arial", 32, "bold"),
+            bg="#1a1a1a",
+            fg="white"
         )
-        title.pack(pady=(20, 10))
+        title.pack(pady=20)
         
-        # Not giriş alanı
-        self.text_input = ctk.CTkTextbox(
-            self,
-            font=ctk.CTkFont(size=14),
-            width=750,
-            height=300,
-            corner_radius=10,
-            border_width=3,
-            border_color="#4A90E2",
-            fg_color=("#DBDBDB", "#2B2B2B"),
-            text_color=("black", "white"),
-            wrap="word"
+        # Text area - çok basit layout
+        text_frame = tk.Frame(self.root, bg="#1a1a1a")
+        text_frame.pack(pady=10, padx=20)
+        
+        self.text_input = tk.Text(
+            text_frame,
+            height=12,
+            width=70,
+            font=("Arial", 14),
+            bg="white",
+            fg="black",
+            insertbackground="black",
+            wrap=tk.WORD,
+            relief=tk.SOLID,
+            borderwidth=3,
+            highlightthickness=3,
+            highlightbackground="#007AFF",
+            highlightcolor="#007AFF"
         )
+        
+        # Scrollbar
+        scrollbar = tk.Scrollbar(text_frame, orient="vertical", command=self.text_input.yview)
+        self.text_input.configure(yscrollcommand=scrollbar.set)
+        
         # Placeholder text ekle
         self.text_input.insert("1.0", "Notunuzu buraya yazın...")
-        self.text_input.configure(state="normal")
-        self.text_input.pack(pady=10, padx=20, fill="x")
+        self.text_input.config(fg="#999999")
+        
+        # Layout - grid kullan (daha kontrollü)
+        self.text_input.grid(row=0, column=0, sticky="nsew")
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        text_frame.grid_rowconfigure(0, weight=1)
+        text_frame.grid_columnconfigure(0, weight=1)
         
         # Placeholder davranışı için event binding
         self.text_input.bind("<FocusIn>", self.on_text_focus_in)
         self.text_input.bind("<FocusOut>", self.on_text_focus_out)
         
         # Butonlar frame
-        button_frame = ctk.CTkFrame(self, fg_color="transparent")
-        button_frame.pack(pady=10, fill="x")
+        button_frame = tk.Frame(self.root, bg="#1a1a1a")
+        button_frame.pack(pady=10)
         
         # Kaydet butonu
-        save_btn = ctk.CTkButton(
+        save_btn = tk.Button(
             button_frame,
             text="💾 Kaydet",
             command=self.save_note,
-            width=150,
-            height=40,
-            corner_radius=10
+            width=15,
+            height=2,
+            bg="#007AFF",
+            fg="white",
+            font=("Arial", 12),
+            cursor="hand2"
         )
         save_btn.pack(side="left", padx=10)
         
         # Temizle butonu
-        clear_btn = ctk.CTkButton(
+        clear_btn = tk.Button(
             button_frame,
             text="🗑️ Temizle",
             command=self.clear_note,
-            width=150,
-            height=40,
-            fg_color="transparent",
-            border_width=2,
-            border_color="gray",
-            corner_radius=10
+            width=15,
+            height=2,
+            bg="#FF3B30",
+            fg="white",
+            font=("Arial", 12),
+            cursor="hand2"
         )
         clear_btn.pack(side="left", padx=10)
         
         # Not listesi
-        self.notes_label = ctk.CTkLabel(
-            self,
+        self.notes_label = tk.Label(
+            self.root,
             text=f"Toplam {len(self.notes)} not",
-            font=ctk.CTkFont(size=14),
-            text_color="white"
+            font=("Arial", 14),
+            bg="#1a1a1a",
+            fg="white"
         )
         self.notes_label.pack(pady=10)
         
         # Footer
-        footer = ctk.CTkLabel(
-            self,
+        footer = tk.Label(
+            self.root,
             text="💡 İpucu: Notlarınız otomatik olarak kaydedilir",
-            font=ctk.CTkFont(size=11),
-            text_color="gray"
+            font=("Arial", 11),
+            bg="#1a1a1a",
+            fg="gray"
         )
-        footer.pack(pady=(0, 10))
-        
-        # Debug: Widget'ların oluşturulduğunu kontrol et
-        print(f"Widget'lar oluşturuldu. Text input: {self.text_input}")
-        print(f"Window size: {self.winfo_width()}x{self.winfo_height()}")
+        footer.pack(pady=5)
     
     def save_note(self):
         """Notu kaydet"""
@@ -143,6 +160,7 @@ class DesktopApp(ctk.CTk):
             self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
             self.text_input.delete("1.0", "end")
             self.text_input.insert("1.0", "Notunuzu buraya yazın...")
+            self.text_input.config(fg="#999999")  # Gri placeholder
         else:
             self.notes_label.configure(text=f"❌ {error_msg}")
     
@@ -150,19 +168,26 @@ class DesktopApp(ctk.CTk):
         """Notu temizle"""
         self.text_input.delete("1.0", "end")
         self.text_input.insert("1.0", "Notunuzu buraya yazın...")
+        self.text_input.config(fg="#999999")  # Gri placeholder
     
     def on_text_focus_in(self, event):
         """Text area'ya odaklanıldığında placeholder'ı temizle"""
         current_text = self.text_input.get("1.0", "end-1c")
         if current_text.strip() == "Notunuzu buraya yazın...":
             self.text_input.delete("1.0", "end")
+            self.text_input.config(fg="black")
     
     def on_text_focus_out(self, event):
         """Text area'dan çıkıldığında boşsa placeholder ekle"""
         current_text = self.text_input.get("1.0", "end-1c")
         if not current_text.strip():
             self.text_input.insert("1.0", "Notunuzu buraya yazın...")
+            self.text_input.config(fg="#999999")  # Gri placeholder
+    
+    def run(self):
+        """Uygulamayı çalıştır"""
+        self.root.mainloop()
 
 if __name__ == "__main__":
     app = DesktopApp()
-    app.mainloop()
+    app.run()
