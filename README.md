@@ -22,3 +22,7 @@ python main.py
 - Python 3.10+
 - CustomTkinter (Modern UI)
 - JSON (Veri saklama)
+
+## Lisans
+
+MIT License - Detaylar için [LICENSE](LICENSE) dosyasına bakın.
