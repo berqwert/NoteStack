@@ -93,6 +93,15 @@ class DesktopApp(ctk.CTk):
             font=ctk.CTkFont(size=14)
         )
         self.notes_label.pack(pady=10)
+        
+        # Footer
+        footer = ctk.CTkLabel(
+            self,
+            text="💡 İpucu: Notlarınız otomatik olarak kaydedilir",
+            font=ctk.CTkFont(size=11),
+            text_color="gray"
+        )
+        footer.pack(pady=5)
     
     def save_note(self):
         """Notu kaydet"""
