@@ -24,6 +24,9 @@ class DesktopApp:
     
     def create_widgets(self):
         """Ana widget'ları oluştur"""
+        # Sağ üstte options butonu
+        self.options_button = components.create_options_button(self.root)
+        
         # Başlık
         components.create_title(self.root)
         

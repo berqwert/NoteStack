@@ -1,6 +1,34 @@
 import tkinter as tk
 
 
+def create_options_button(parent) -> tk.Button:
+    """
+    Sağ üstte options butonu oluştur
+    
+    Returns:
+        options_button
+    """
+    # Sağ üst frame
+    top_frame = tk.Frame(parent, bg="#1a1a1a")
+    top_frame.pack(fill="x", pady=10, padx=10)
+    
+    # Options butonu
+    options_button = tk.Button(
+        top_frame,
+        text="⚙️",
+        font=("Arial", 16),
+        bg="#2a2a2a",
+        fg="white",
+        relief=tk.FLAT,
+        cursor="hand2",
+        width=3,
+        height=1
+    )
+    options_button.pack(side="right")
+    
+    return options_button
+
+
 def create_title(parent) -> tk.Label:
     """Başlık widget'ı oluştur"""
     title = tk.Label(
