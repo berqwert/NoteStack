@@ -16,53 +16,53 @@ class DesktopApp:
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
         self.root.configure(bg="#1a1a1a")
         
-        # Notları yükle
+        # Load notes
         self.notes = load_notes()
         
-        # UI oluştur
+        # Create UI
         self.create_widgets()
     
     def create_widgets(self):
-        """Ana widget'ları oluştur"""
-        # Sağ üstte options butonu
+        """Create main widgets"""
+        # Options button in top right
         self.options_button = components.create_options_button(self.root)
         
-        # Başlık
+        # Title
         components.create_title(self.root)
         
-        # Not başlığı input
+        # Note title input
         self.title_input = components.create_title_input(self.root)
         
         # Text area
         self.text_input, _, _ = components.create_text_area(self.root)
         setup_text_handlers(self.text_input)
         
-        # Butonlar
+        # Buttons
         components.create_buttons(
             self.root,
             save_command=self.save_note,
             clear_command=self.clear_note
         )
         
-        # Label'lar
+        # Labels
         self.notes_label, _ = components.create_labels(self.root, len(self.notes))
     
     def save_note(self):
-        """Notu kaydet"""
+        """Save note"""
         title = self.title_input.get().strip()
         content = get_text_content(self.text_input)
         is_valid, error_msg = validate_note(content)
         
         if is_valid:
-            # Yeni not oluştur
+            # Create new note
             new_note = Note(content=content, title=title)
             new_note.id = len(self.notes) + 1
             self.notes.append(new_note)
             
-            # Kaydet
+            # Save
             save_notes(self.notes)
             
-            # UI güncelle
+            # Update UI
             self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
             self.title_input.delete(0, tk.END)
             clear_text(self.text_input)
@@ -70,12 +70,12 @@ class DesktopApp:
             self.notes_label.configure(text=f"❌ {error_msg}")
     
     def clear_note(self):
-        """Notu temizle"""
+        """Clear note"""
         self.title_input.delete(0, tk.END)
         clear_text(self.text_input)
     
     def run(self):
-        """Uygulamayı çalıştır"""
+        """Run the application"""
         self.root.mainloop()
 
 

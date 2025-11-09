@@ -3,16 +3,16 @@ import tkinter as tk
 
 def create_options_button(parent) -> tk.Button:
     """
-    Sağ üstte options butonu oluştur
+    Create options button in top right
     
     Returns:
         options_button
     """
-    # Sağ üst frame
+    # Top right frame
     top_frame = tk.Frame(parent, bg="#1a1a1a")
     top_frame.pack(fill="x", pady=10, padx=10)
     
-    # Options butonu
+    # Options button
     options_button = tk.Button(
         top_frame,
         text="⚙️",
@@ -30,7 +30,7 @@ def create_options_button(parent) -> tk.Button:
 
 
 def create_title(parent) -> tk.Label:
-    """Başlık widget'ı oluştur"""
+    """Create title widget"""
     title = tk.Label(
         parent,
         text="📝 Notlarım",
@@ -44,7 +44,7 @@ def create_title(parent) -> tk.Label:
 
 def create_title_input(parent) -> tk.Entry:
     """
-    Not başlığı için Entry widget'ı oluştur
+    Create Entry widget for note title
     
     Returns:
         title_input Entry widget
@@ -63,7 +63,7 @@ def create_title_input(parent) -> tk.Entry:
     title_frame = tk.Frame(parent, bg="#1a1a1a")
     title_frame.pack(pady=(0, 10), padx=20, fill="x")
     
-    # Entry
+    # Entry widget
     title_input = tk.Entry(
         title_frame,
         font=("Arial", 14),
@@ -83,7 +83,7 @@ def create_title_input(parent) -> tk.Entry:
 
 def create_text_area(parent) -> tuple[tk.Text, tk.Scrollbar, tk.Frame]:
     """
-    Text area ve scrollbar oluştur
+    Create text area and scrollbar
     
     Returns:
         (text_input, scrollbar, text_frame) tuple
@@ -92,7 +92,7 @@ def create_text_area(parent) -> tuple[tk.Text, tk.Scrollbar, tk.Frame]:
     text_frame = tk.Frame(parent, bg="#1a1a1a")
     text_frame.pack(pady=10, padx=20)
     
-    # Text input
+    # Text input widget
     text_input = tk.Text(
         text_frame,
         height=12,
@@ -113,11 +113,11 @@ def create_text_area(parent) -> tuple[tk.Text, tk.Scrollbar, tk.Frame]:
     scrollbar = tk.Scrollbar(text_frame, orient="vertical", command=text_input.yview)
     text_input.configure(yscrollcommand=scrollbar.set)
     
-    # Placeholder text ekle
+    # Add placeholder text
     text_input.insert("1.0", "Notunuzu buraya yazın...")
     text_input.config(fg="#999999")
     
-    # Layout - grid kullan
+    # Layout - use grid
     text_input.grid(row=0, column=0, sticky="nsew")
     scrollbar.grid(row=0, column=1, sticky="ns")
     text_frame.grid_rowconfigure(0, weight=1)
@@ -128,12 +128,12 @@ def create_text_area(parent) -> tuple[tk.Text, tk.Scrollbar, tk.Frame]:
 
 def create_buttons(parent, save_command, clear_command) -> tk.Frame:
     """
-    Butonlar frame'i oluştur
+    Create buttons frame
     
     Args:
         parent: Parent widget
-        save_command: Kaydet butonu command'i
-        clear_command: Temizle butonu command'i
+        save_command: Save button command
+        clear_command: Clear button command
     
     Returns:
         button_frame
@@ -141,7 +141,7 @@ def create_buttons(parent, save_command, clear_command) -> tk.Frame:
     button_frame = tk.Frame(parent, bg="#1a1a1a")
     button_frame.pack(pady=10)
     
-    # Kaydet butonu
+    # Save button
     save_btn = tk.Button(
         button_frame,
         text="💾 Kaydet",
@@ -155,7 +155,7 @@ def create_buttons(parent, save_command, clear_command) -> tk.Frame:
     )
     save_btn.pack(side="left", padx=10)
     
-    # Temizle butonu
+    # Clear button
     clear_btn = tk.Button(
         button_frame,
         text="🗑️ Temizle",
@@ -174,16 +174,16 @@ def create_buttons(parent, save_command, clear_command) -> tk.Frame:
 
 def create_labels(parent, notes_count: int) -> tuple[tk.Label, tk.Label]:
     """
-    Label'ları oluştur (not listesi ve footer)
+    Create labels (note list and footer)
     
     Args:
         parent: Parent widget
-        notes_count: Not sayısı
+        notes_count: Number of notes
     
     Returns:
         (notes_label, footer) tuple
     """
-    # Not listesi
+    # Notes list label
     notes_label = tk.Label(
         parent,
         text=f"Toplam {notes_count} not",

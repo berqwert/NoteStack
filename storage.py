@@ -1,4 +1,4 @@
-"""Not depolama işlemleri"""
+"""Note storage operations"""
 import json
 import os
 from typing import List
@@ -7,16 +7,16 @@ from config import DATA_DIR, NOTES_FILE
 
 
 def ensure_data_dir():
-    """Veri klasörünü oluştur"""
+    """Create data directory"""
     os.makedirs(DATA_DIR, exist_ok=True)
 
 
 def load_notes() -> List[Note]:
     """
-    Notları yükle
+    Load notes
     
     Returns:
-        Note listesi
+        List of Note objects
     """
     ensure_data_dir()
     
@@ -33,10 +33,10 @@ def load_notes() -> List[Note]:
 
 def save_notes(notes: List[Note]):
     """
-    Notları kaydet
+    Save notes
     
     Args:
-        notes: Kaydedilecek Note listesi
+        notes: List of Note objects to save
     """
     ensure_data_dir()
     
@@ -45,5 +45,5 @@ def save_notes(notes: List[Note]):
         with open(NOTES_FILE, 'w', encoding='utf-8') as f:
             json.dump(notes_data, f, ensure_ascii=False, indent=2)
     except IOError as e:
-        print(f"Notlar kaydedilirken hata oluştu: {e}")
+        print(f"Error saving notes: {e}")
 

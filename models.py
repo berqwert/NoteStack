@@ -3,17 +3,17 @@ from typing import Optional
 
 
 class Note:
-    """Not modeli"""
+    """Note model"""
     
     def __init__(self, content: str, title: str = "", note_id: Optional[int] = None, date: Optional[str] = None):
         """
-        Note oluştur
+        Create a Note
         
         Args:
-            content: Not içeriği
-            title: Not başlığı
-            note_id: Not ID'si (yoksa otomatik oluşturulur)
-            date: Tarih (yoksa şu anki zaman kullanılır)
+            content: Note content
+            title: Note title
+            note_id: Note ID (auto-generated if not provided)
+            date: Date (current time used if not provided)
         """
         self.id = note_id
         self.title = title
@@ -21,7 +21,7 @@ class Note:
         self.date = date if date else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     def to_dict(self) -> dict:
-        """Note'u dictionary'ye çevir"""
+        """Convert Note to dictionary"""
         return {
             "id": self.id,
             "title": self.title,
@@ -31,7 +31,7 @@ class Note:
     
     @classmethod
     def from_dict(cls, data: dict) -> 'Note':
-        """Dictionary'den Note oluştur"""
+        """Create Note from dictionary"""
         return cls(
             content=data.get("content", ""),
             title=data.get("title", ""),

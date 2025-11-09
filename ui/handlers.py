@@ -1,23 +1,23 @@
-"""Event handler'lar"""
+"""Event handlers"""
 
 
 def setup_text_handlers(text_input, placeholder_text: str = "Notunuzu buraya yazın..."):
     """
-    Text area için event handler'ları ayarla
+    Setup event handlers for text area
     
     Args:
         text_input: Text widget
-        placeholder_text: Placeholder metni
+        placeholder_text: Placeholder text
     """
     def on_focus_in(event):
-        """Text area'ya odaklanıldığında placeholder'ı temizle"""
+        """Clear placeholder when text area is focused"""
         current_text = text_input.get("1.0", "end-1c")
         if current_text.strip() == placeholder_text:
             text_input.delete("1.0", "end")
             text_input.config(fg="black")
     
     def on_focus_out(event):
-        """Text area'dan çıkıldığında boşsa placeholder ekle"""
+        """Add placeholder if text area is empty when focus is lost"""
         current_text = text_input.get("1.0", "end-1c")
         if not current_text.strip():
             text_input.insert("1.0", placeholder_text)
@@ -29,14 +29,14 @@ def setup_text_handlers(text_input, placeholder_text: str = "Notunuzu buraya yaz
 
 def get_text_content(text_input, placeholder_text: str = "Notunuzu buraya yazın...") -> str:
     """
-    Text area'dan içeriği al (placeholder'ı filtrele)
+    Get content from text area (filter placeholder)
     
     Args:
         text_input: Text widget
-        placeholder_text: Placeholder metni
+        placeholder_text: Placeholder text
     
     Returns:
-        Temizlenmiş içerik
+        Cleaned content
     """
     content = text_input.get("1.0", "end-1c").strip()
     if content == placeholder_text:
@@ -46,11 +46,11 @@ def get_text_content(text_input, placeholder_text: str = "Notunuzu buraya yazın
 
 def clear_text(text_input, placeholder_text: str = "Notunuzu buraya yazın..."):
     """
-    Text area'yı temizle ve placeholder ekle
+    Clear text area and add placeholder
     
     Args:
         text_input: Text widget
-        placeholder_text: Placeholder metni
+        placeholder_text: Placeholder text
     """
     text_input.delete("1.0", "end")
     text_input.insert("1.0", placeholder_text)
