@@ -2,9 +2,84 @@
 
 ## Yüksek Öncelik
 
+### Textbox'ı resizable yapma
+- Text area'yı pencere boyutuna göre resize edilebilir yap
+- Kullanıcı pencereyi büyütüp küçülttüğünde textbox da büyüyüp küçülsün
+- `fill="both", expand=True` kullanarak frame'i resizable yap
+
+### Tab'lara X butonu ekleme
+- Her tab'ın sağına küçük X butonu ekle
+- Tıklanınca notu silecek (onay mesajı ile)
+- Tab'ı kaldır ve notes listesinden sil
+
+### Temizle/Kaldır butonu mantığı
+**Öneri: Dinamik buton yaklaşımı**
+- Eğer bir not düzenleniyorsa (`current_note_id` varsa): Buton "Kaldır" olsun ve notu silsin
+- Eğer yeni not yazılıyorsa (`current_note_id` yoksa): Buton "Temizle" olsun ve sadece input'ları temizlesin
+- Alternatif: İki ayrı buton tut (Temizle + Kaldır), Kaldır sadece not düzenlenirken görünsün
+
+### Visibility vs Silme
+**Öneri: İlk versiyonda direkt silme**
+- Tab X butonu: Notu tamamen siler (onay ile)
+- Visibility daha karmaşık, sonra eklenebilir
+- Eğer visibility istersen: `Note` modeline `is_visible` field ekle, filtrele
+
 ## Orta Öncelik
 
+### Options menüsünde directory seçimi
+- Options butonuna tıklanınca menü açılsın
+- Menüde "Kayıt Klasörü Seç" seçeneği olsun
+- Kullanıcı kendi istediği klasörü seçebilsin
+- Seçilen klasör config'de saklansın
+- Notlar yeni klasöre kaydedilsin
+
+### Warning sistemi
+- Uyarı mesajları için warning sistemi ekle
+- Örnek: Not silinirken onay mesajı, kayıt klasörü değiştirilirken uyarı vb.
+
 ## Düşük Öncelik / Gelecek
+
+### Dosya şifreleme
+- Uygulamanın oluşturduğu dosyalar hash'lenecek
+- Dosya boyutları düşürülecek (compression)
+- Başka kimse okuyamayacak, sadece uygulama içinden erişilebilir
+- Güvenlik için encryption ekle
+
+### Görselleri iyileştirme
+- UI/UX görsellerini iyileştir (en son aşamalar)
+- İkonlar, renkler, animasyonlar vb.
+
+### Options'ta theme seçeneği
+- Options menüsünde tema seçeneği ekle
+- Light/Dark theme seçenekleri
+- Kullanıcı tercihini kaydet
+
+### Android uygulaması ve sync
+- Android için uygulama çıkar
+- Mobil ve desktop arasında veri senkronizasyonu
+- Cloud storage entegrasyonu (isteğe bağlı)
+
+### Notlara fotoğraf yükleme
+- Her nota fotoğraf ekleme seçeneği
+- Fotoğrafları not içeriğine gömme veya ek olarak saklama
+- Fotoğraf görüntüleme ve düzenleme
+
+### Slider ile notlar arasında geçiş
+- Tabs yerine slider/carousel kullanarak notlar arasında geçiş
+- Daha modern ve mobil-friendly arayüz
+- Swipe gesture desteği
+
+### AI ile not düzenleme (Magic Button)
+- Notları AI ile yeniden düzenlemek için magic button
+- AI ile not içeriğini iyileştirme, düzeltme, özetleme
+- API entegrasyonu (OpenAI, Claude vb.)
+
+## Gelecek (Uzun Vadeli)
+
+### Login/Logout sistemi
+- Kullanıcı girişi/çıkışı ekle
+- Her kullanıcının kendi notları
+- Multi-user support
 
 ## Notlar
 
