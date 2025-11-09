@@ -32,7 +32,7 @@ def create_title(parent) -> tk.Label:
     """Create title widget"""
     title = tk.Label(
         parent,
-        text="📝 Notlarım",
+        text="📝 NoteStack",
         font=("Arial", 32, "bold"),
         bg="#1a1a1a",
         fg="white"

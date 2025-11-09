@@ -1,6 +1,6 @@
 """Configuration settings for the app"""
 
-APP_NAME = "Modern Desktop App"
+APP_NAME = "NoteStack"
 APP_VERSION = "1.0.1"
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 800

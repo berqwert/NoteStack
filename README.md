@@ -1,4 +1,4 @@
-# NotingApp
+# NoteStack
 
 Modern ve kullanıcı dostu Python masaüstü not alma uygulaması.
 
