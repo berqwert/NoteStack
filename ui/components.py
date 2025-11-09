@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 
 def create_options_button(parent) -> tk.Button:
@@ -8,11 +9,9 @@ def create_options_button(parent) -> tk.Button:
     Returns:
         options_button
     """
-    # Top right frame
     top_frame = tk.Frame(parent, bg="#1a1a1a")
     top_frame.pack(fill="x", pady=10, padx=10)
     
-    # Options button
     options_button = tk.Button(
         top_frame,
         text="⚙️",
@@ -49,7 +48,6 @@ def create_title_input(parent) -> tk.Entry:
     Returns:
         title_input Entry widget
     """
-    # Label
     title_label = tk.Label(
         parent,
         text="Başlık:",
@@ -59,11 +57,9 @@ def create_title_input(parent) -> tk.Entry:
     )
     title_label.pack(pady=(10, 5), padx=20, anchor="w")
     
-    # Entry frame
     title_frame = tk.Frame(parent, bg="#1a1a1a")
     title_frame.pack(pady=(0, 10), padx=20, fill="x")
     
-    # Entry widget
     title_input = tk.Entry(
         title_frame,
         font=("Arial", 14),
@@ -88,11 +84,9 @@ def create_text_area(parent) -> tuple[tk.Text, tk.Scrollbar, tk.Frame]:
     Returns:
         (text_input, scrollbar, text_frame) tuple
     """
-    # Text area frame
     text_frame = tk.Frame(parent, bg="#1a1a1a")
     text_frame.pack(pady=10, padx=20)
     
-    # Text input widget
     text_input = tk.Text(
         text_frame,
         height=12,
@@ -109,15 +103,12 @@ def create_text_area(parent) -> tuple[tk.Text, tk.Scrollbar, tk.Frame]:
         highlightcolor="#007AFF"
     )
     
-    # Scrollbar
     scrollbar = tk.Scrollbar(text_frame, orient="vertical", command=text_input.yview)
     text_input.configure(yscrollcommand=scrollbar.set)
     
-    # Add placeholder text
     text_input.insert("1.0", "Notunuzu buraya yazın...")
     text_input.config(fg="#999999")
     
-    # Layout - use grid
     text_input.grid(row=0, column=0, sticky="nsew")
     scrollbar.grid(row=0, column=1, sticky="ns")
     text_frame.grid_rowconfigure(0, weight=1)
@@ -141,7 +132,6 @@ def create_buttons(parent, save_command, clear_command) -> tk.Frame:
     button_frame = tk.Frame(parent, bg="#1a1a1a")
     button_frame.pack(pady=10)
     
-    # Save button
     save_btn = tk.Button(
         button_frame,
         text="💾 Kaydet",
@@ -155,7 +145,6 @@ def create_buttons(parent, save_command, clear_command) -> tk.Frame:
     )
     save_btn.pack(side="left", padx=10)
     
-    # Clear button
     clear_btn = tk.Button(
         button_frame,
         text="🗑️ Temizle",
@@ -183,7 +172,6 @@ def create_labels(parent, notes_count: int) -> tuple[tk.Label, tk.Label]:
     Returns:
         (notes_label, footer) tuple
     """
-    # Notes list label
     notes_label = tk.Label(
         parent,
         text=f"Toplam {notes_count} not",
@@ -193,7 +181,6 @@ def create_labels(parent, notes_count: int) -> tuple[tk.Label, tk.Label]:
     )
     notes_label.pack(pady=10)
     
-    # Footer
     footer = tk.Label(
         parent,
         text="💡 İpucu: Notlarınız otomatik olarak kaydedilir",
@@ -205,3 +192,70 @@ def create_labels(parent, notes_count: int) -> tuple[tk.Label, tk.Label]:
     
     return notes_label, footer
 
+
+def create_note_tabs(parent, notes, on_tab_select=None) -> ttk.Notebook:
+    """
+    Create tabs section to display notes
+    
+    Args:
+        parent: Parent widget
+        notes: List of Note objects
+        on_tab_select: Callback function when tab is selected (receives note_id)
+    
+    Returns:
+        notebook widget
+    """
+    notebook_frame = tk.Frame(parent, bg="#1a1a1a")
+    notebook_frame.pack(fill="x", padx=20, pady=10)
+    
+    tabs_label = tk.Label(
+        notebook_frame,
+        text="📑 Saved Notes",
+        font=("Arial", 14, "bold"),
+        bg="#1a1a1a",
+        fg="white"
+    )
+    tabs_label.pack(anchor="w", pady=(0, 10))
+    
+    notebook = ttk.Notebook(notebook_frame)
+    notebook.pack(fill="x", pady=(0, 10))
+    
+    style = ttk.Style()
+    style.theme_use('clam')
+    style.configure('TNotebook', background='#1a1a1a', borderwidth=0)
+    style.configure('TNotebook.Tab', 
+                    background='#2a2a2a', 
+                    foreground='white',
+                    padding=[20, 10],
+                    borderwidth=1)
+    style.map('TNotebook.Tab',
+              background=[('selected', '#007AFF')],
+              foreground=[('selected', 'white')])
+    
+    for note in notes:
+        tab_frame = tk.Frame(notebook, bg="#1a1a1a")
+        notebook.add(tab_frame, text=get_tab_label(note))
+        tab_frame.note_id = note.id
+    
+    if on_tab_select:
+        notebook.bind("<<NotebookTabChanged>>", lambda e: on_tab_changed(notebook, on_tab_select))
+    
+    return notebook
+
+
+def get_tab_label(note) -> str:
+    """Generate label for tab from note"""
+    if note.title:
+        title = note.title[:20] + "..." if len(note.title) > 20 else note.title
+        return f"📄 {title}"
+    else:
+        content_preview = note.content[:15].strip() if note.content else "Untitled"
+        return f"📄 {content_preview}..."
+
+
+def on_tab_changed(notebook, callback):
+    """Handle tab change event"""
+    selected_tab = notebook.index(notebook.select())
+    tab_frame = notebook.nametowidget(notebook.tabs()[selected_tab])
+    if hasattr(tab_frame, 'note_id'):
+        callback(tab_frame.note_id)
