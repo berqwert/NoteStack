@@ -4,11 +4,11 @@ Modern ve kullanıcı dostu Python masaüstü not alma uygulaması.
 
 ## Özellikler
 
-- 🎨 Modern ve şık arayüz (CustomTkinter)
-- 💾 JSON ile veri saklama
-- ⚡ Hızlı ve performanslı
-- 🔧 Özelleştirilebilir
-- ✅ Not validasyonu
+- Modern ve şık arayüz (CustomTkinter)
+- JSON ile veri saklama
+- Hızlı ve performanslı
+- Özelleştirilebilir
+- Not validasyonu
 
 ## Kurulum
 
