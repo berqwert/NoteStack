@@ -2,6 +2,11 @@
 
 ## Yüksek Öncelik
 
+### Yeni not tuşu ekle
+- Yeni not oluşturmak için buton ekle
+- Tıklanınca input'ları temizlesin ve yeni not moduna geçsin
+- Mevcut not düzenleme modundan çıksın
+
 ### Textbox'ı resizable yapma
 - Text area'yı pencere boyutuna göre resize edilebilir yap
 - Kullanıcı pencereyi büyütüp küçülttüğünde textbox da büyüyüp küçülsün
@@ -25,6 +30,11 @@
 - Eğer visibility istersen: `Note` modeline `is_visible` field ekle, filtrele
 
 ## Orta Öncelik
+
+### Drag and drop
+- Notları sürükle-bırak ile yeniden sıralama
+- Tab'ları drag and drop ile sıralama
+- Notların sırasını kaydetme
 
 ### Options menüsünde directory seçimi
 - Options butonuna tıklanınca menü açılsın
