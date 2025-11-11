@@ -193,7 +193,7 @@ def create_labels(parent, notes_count: int) -> tuple[tk.Label, tk.Label]:
     return notes_label, footer
 
 
-def create_note_tabs(parent, notes, on_tab_select=None) -> ttk.Notebook:
+def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -> ttk.Notebook:
     """
     Create tabs section to display notes
     
@@ -201,6 +201,7 @@ def create_note_tabs(parent, notes, on_tab_select=None) -> ttk.Notebook:
         parent: Parent widget
         notes: List of Note objects
         on_tab_select: Callback function when tab is selected (receives note_id)
+        new_note_command: New note button command (optional)
     
     Returns:
         notebook widget
@@ -217,8 +218,27 @@ def create_note_tabs(parent, notes, on_tab_select=None) -> ttk.Notebook:
     )
     tabs_label.pack(anchor="w", pady=(0, 10))
     
-    notebook = ttk.Notebook(notebook_frame)
-    notebook.pack(fill="x", pady=(0, 10))
+    # Frame for notebook and new note button side by side
+    tabs_container = tk.Frame(notebook_frame, bg="#1a1a1a")
+    tabs_container.pack(fill="x", pady=(0, 10))
+    
+    notebook = ttk.Notebook(tabs_container)
+    notebook.pack(side="left", fill="x", expand=True)
+    
+    if new_note_command:
+        new_btn = tk.Button(
+            tabs_container,
+            text="➕ New Note",
+            command=new_note_command,
+            width=12,
+            height=1,
+            bg="#34C759",
+            fg="white",
+            font=("Arial", 10),
+            cursor="hand2",
+            relief=tk.FLAT
+        )
+        new_btn.pack(side="right", padx=(10, 0))
     
     style = ttk.Style()
     style.theme_use('clam')

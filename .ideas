@@ -2,6 +2,12 @@
 
 ## Yüksek Öncelik
 
+### Delete fonksiyonunda sorun
+- Bazen 2. kez delete ettiğinde siliyor
+- Hover handler'da state management sorunu olabilir
+- `hovered_tab_index` doğru reset edilmiyor olabilir
+- Delete sonrası state temizliği kontrol edilmeli
+
 ### Yeni not tuşu ekle
 - Yeni not oluşturmak için buton ekle
 - Tıklanınca input'ları temizlesin ve yeni not moduna geçsin
@@ -30,6 +36,13 @@
 - Eğer visibility istersen: `Note` modeline `is_visible` field ekle, filtrele
 
 ## Orta Öncelik
+
+### CustomTkinter'a geçiş
+- Modern görünüm için CustomTkinter'a geçiş düşünülüyor
+- Daha iyi widget'lar, animasyonlar ve tema sistemi
+- Tüm widget'ları değiştirmek gerekir (tk.Button → ctk.CTkButton, vb.)
+- Style ayarlarını güncellemek gerekir
+- Adım adım geçiş yapılmalı, her adımda test edilmeli
 
 ### Drag and drop
 - Notları sürükle-bırak ile yeniden sıralama

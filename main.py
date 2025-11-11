@@ -29,7 +29,8 @@ class DesktopApp:
         self.notebook = components.create_note_tabs(
             self.root, 
             self.notes,
-            on_tab_select=self.on_tab_select
+            on_tab_select=self.on_tab_select,
+            new_note_command=self.new_note
         )
         components.create_title(self.root)
         self.title_input = components.create_title_input(self.root)
@@ -115,6 +116,13 @@ class DesktopApp:
         self.current_note_id = None
         self.title_input.delete(0, tk.END)
         clear_text(self.text_input)
+    
+    def new_note(self):
+        """Create new note - clear inputs and reset state"""
+        self.current_note_id = None
+        self.title_input.delete(0, tk.END)
+        clear_text(self.text_input)
+        self.notes_label.configure(text=f"Toplam {len(self.notes)} not")
     
     def delete_note(self, note_id):
         """Delete note after confirmation"""
