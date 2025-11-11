@@ -4,10 +4,11 @@ from datetime import datetime
 from config import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT
 from models import Note
 from storage import load_notes, save_notes
-from utils import validate_note
+from utils import validate_note, confirm_delete
 from ui import components
 from ui.components import get_tab_label
 from ui.handlers import setup_text_handlers, get_text_content, clear_text
+from ui.tab_handlers import TabHoverHandler
 
 
 class DesktopApp:
@@ -20,6 +21,7 @@ class DesktopApp:
         self.notes = load_notes()
         self.current_note_id = None
         self.create_widgets()
+        self.setup_tab_hover()
     
     def create_widgets(self):
         """Create main widgets"""
@@ -40,6 +42,14 @@ class DesktopApp:
         )
         self.notes_label, _ = components.create_labels(self.root, len(self.notes))
     
+    def setup_tab_hover(self):
+        """Setup hover events for tab context menu"""
+        self.tab_hover_handler = TabHoverHandler(
+            self.root,
+            self.notebook,
+            self.delete_note
+        )
+
     def save_note(self):
         """Save note"""
         title = self.title_input.get().strip()
@@ -80,6 +90,10 @@ class DesktopApp:
             tab_frame = tk.Frame(self.notebook, bg="#1a1a1a")
             self.notebook.add(tab_frame, text=get_tab_label(note))
             tab_frame.note_id = note.id
+        
+        # Reset hover handler after refresh
+        if hasattr(self, 'tab_hover_handler'):
+            self.tab_hover_handler.reset()
     
     def on_tab_select(self, note_id):
         """Handle tab selection"""
@@ -101,6 +115,25 @@ class DesktopApp:
         self.current_note_id = None
         self.title_input.delete(0, tk.END)
         clear_text(self.text_input)
+    
+    def delete_note(self, note_id):
+        """Delete note after confirmation"""
+        note = next((n for n in self.notes if n.id == note_id), None)
+        if not note:
+            return
+        
+        note_title = note.title if note.title else None
+        if confirm_delete(self.root, note_title):
+            self.notes = [n for n in self.notes if n.id != note_id]
+            save_notes(self.notes)
+            
+            if self.current_note_id == note_id:
+                self.current_note_id = None
+                self.title_input.delete(0, tk.END)
+                clear_text(self.text_input)
+            
+            self.refresh_tabs()
+            self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
     
     def run(self):
         """Run the application"""
