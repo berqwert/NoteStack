@@ -38,8 +38,7 @@
 ## Orta Öncelik
 
 ### CustomTkinter'a geçiş
-- Modern görünüm için CustomTkinter'a geçiş düşünülüyor
-- Daha iyi widget'lar, animasyonlar ve tema sistemi
+- Modern görünüm için CustomTkinter'a geçilebilir
 - Tüm widget'ları değiştirmek gerekir (tk.Button → ctk.CTkButton, vb.)
 - Style ayarlarını güncellemek gerekir
 - Adım adım geçiş yapılmalı, her adımda test edilmeli
