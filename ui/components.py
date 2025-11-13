@@ -188,7 +188,6 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
     )
     tabs_label.pack(anchor="w", pady=(0, 10))
     
-    # Frame for tabview and new note button side by side
     tabs_container = ctk.CTkFrame(notebook_frame, fg_color="transparent")
     tabs_container.pack(fill="x", pady=(0, 10))
     
@@ -218,7 +217,6 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
         tab_frame.note_id = note.id
         tabview.tab_references[tab_name] = note.id
     
-    # Store callback for tab selection
     if on_tab_select:
         def on_tab_changed(value=None):
             # CustomTkinter passes the selected value as argument
@@ -228,10 +226,8 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
                 note_id = tabview.tab_references[selected_tab]
                 on_tab_select(note_id)
         
-        # Store callback
         tabview._on_tab_select_callback = on_tab_select
         
-        # Bind to tab change
         if hasattr(tabview, '_segmented_button'):
             tabview._segmented_button.configure(command=on_tab_changed)
     

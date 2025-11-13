@@ -96,6 +96,11 @@
 - AI ile not içeriğini iyileştirme, düzeltme, özetleme
 - API entegrasyonu (OpenAI, Claude vb.)
 
+### Not türleri ve formatlama
+- Notlar için farklı türler (bullet point, reminder, vb.)
+- Satır başlarında otomatik numaralandırma (1, 2, 3...)
+- Hizalama ve formatlama seçenekleri
+
 ## Gelecek (Uzun Vadeli)
 
 ### Login/Logout sistemi

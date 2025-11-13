@@ -10,7 +10,6 @@ from ui.components import get_tab_label
 from ui.handlers import setup_text_handlers, get_text_content, clear_text
 from ui.tab_handlers import TabHoverHandler
 
-# Set appearance mode and color theme
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
