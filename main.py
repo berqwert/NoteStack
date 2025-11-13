@@ -40,12 +40,13 @@ class DesktopApp:
         self.title_input = components.create_title_input(self.root)
         self.text_input, _ = components.create_text_area(self.root)
         setup_text_handlers(self.text_input)
-        components.create_buttons(
+        _, self.clear_btn = components.create_buttons(
             self.root,
             save_command=self.save_note,
             clear_command=self.clear_note
         )
         self.notes_label, _ = components.create_labels(self.root, len(self.notes))
+        self.update_clear_button()
     
     def setup_tab_hover(self):
         """Setup hover events for tab context menu"""
@@ -74,6 +75,7 @@ class DesktopApp:
                     self.title_input.delete(0, "end")
                     clear_text(self.text_input)
                     self.refresh_tabs()
+                    self.update_clear_button()
             else:
                 new_note = Note(content=content, title=title)
                 new_note.id = len(self.notes) + 1
@@ -83,6 +85,7 @@ class DesktopApp:
                 self.title_input.delete(0, "end")
                 clear_text(self.text_input)
                 self.refresh_tabs()
+                self.update_clear_button()
         else:
             self.notes_label.configure(text=f"❌ {error_msg}")
     
@@ -134,6 +137,7 @@ class DesktopApp:
             self.text_input.delete("1.0", "end")
             self.text_input.insert("1.0", note.content)
             self.text_input.configure(text_color=("gray10", "gray90"))
+            self.update_clear_button()
 
     def clear_inputs(self):
         """Clear input fields"""
@@ -141,10 +145,31 @@ class DesktopApp:
         self.text_input.delete("1.0", "end")
     
     def clear_note(self):
-        """Clear note"""
-        self.current_note_id = None
-        self.title_input.delete(0, "end")
-        clear_text(self.text_input)
+        """Clear note or delete if editing existing note"""
+        if self.current_note_id:
+            # If editing a note, delete it
+            self.delete_note(self.current_note_id)
+        else:
+            # If new note, just clear inputs
+            self.current_note_id = None
+            self.title_input.delete(0, "end")
+            clear_text(self.text_input)
+            self.update_clear_button()
+    
+    def update_clear_button(self):
+        """Update clear button text and appearance based on current state"""
+        if self.current_note_id:
+            self.clear_btn.configure(
+                text="🗑️ Kaldır",
+                fg_color="#FF3B30",
+                hover_color="#CC2E24"
+            )
+        else:
+            self.clear_btn.configure(
+                text="🗑️ Temizle",
+                fg_color="#FF3B30",
+                hover_color="#CC2E24"
+            )
     
     def new_note(self):
         """Create new note - clear inputs and reset state"""
@@ -152,6 +177,7 @@ class DesktopApp:
         self.title_input.delete(0, "end")
         clear_text(self.text_input)
         self.notes_label.configure(text=f"Toplam {len(self.notes)} not")
+        self.update_clear_button()
     
     def delete_note(self, note_id):
         """Delete note after confirmation"""
@@ -168,6 +194,7 @@ class DesktopApp:
                 self.current_note_id = None
                 self.title_input.delete(0, "end")
                 clear_text(self.text_input)
+                self.update_clear_button()
             
             self.refresh_tabs()
             self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")

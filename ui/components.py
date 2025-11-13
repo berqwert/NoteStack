@@ -92,7 +92,7 @@ def create_text_area(parent) -> tuple[ctk.CTkTextbox, ctk.CTkFrame]:
     return text_input, text_frame
 
 
-def create_buttons(parent, save_command, clear_command) -> ctk.CTkFrame:
+def create_buttons(parent, save_command, clear_command) -> tuple[ctk.CTkFrame, ctk.CTkButton]:
     """
     Create buttons frame
     
@@ -102,7 +102,7 @@ def create_buttons(parent, save_command, clear_command) -> ctk.CTkFrame:
         clear_command: Clear button command
     
     Returns:
-        button_frame
+        (button_frame, clear_btn) tuple - clear_btn reference for dynamic updates
     """
     button_frame = ctk.CTkFrame(parent, fg_color="transparent")
     button_frame.pack(pady=10)
@@ -133,7 +133,7 @@ def create_buttons(parent, save_command, clear_command) -> ctk.CTkFrame:
     )
     clear_btn.pack(side="left", padx=10)
     
-    return button_frame
+    return button_frame, clear_btn
 
 
 def create_labels(parent, notes_count: int) -> tuple[ctk.CTkLabel, ctk.CTkLabel]:
