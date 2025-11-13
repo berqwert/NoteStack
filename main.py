@@ -20,6 +20,7 @@ class DesktopApp:
         self.root = ctk.CTk()
         self.root.title(APP_NAME)
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        self.root.minsize(600, 400)  # Minimum window size
         
         self.notes = load_notes()
         self.current_note_id = None

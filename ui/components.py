@@ -77,7 +77,6 @@ def create_text_area(parent) -> tuple[ctk.CTkTextbox, ctk.CTkFrame]:
     
     text_input = ctk.CTkTextbox(
         text_frame,
-        height=300,
         font=("Arial", 14),
         wrap="word",
         corner_radius=5,
