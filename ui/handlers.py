@@ -55,3 +55,21 @@ def clear_text(text_input, placeholder_text: str = "Notunuzu buraya yazın..."):
     text_input.delete("1.0", "end")
     text_input.insert("1.0", placeholder_text)
     text_input.configure(text_color="gray")
+
+
+def setup_search_handler(search_entry, search_callback):
+    """
+    Setup search functionality for notes
+    
+    Args:
+        search_entry: Search entry widget
+        search_callback: Callback function that receives search query and updates tabs
+    """
+    def on_search(event=None):
+        search_query = search_entry.get()
+        search_callback(search_query)
+    
+    search_entry.bind("<KeyRelease>", on_search)
+    return on_search
+
+

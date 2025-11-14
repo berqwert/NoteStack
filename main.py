@@ -4,10 +4,10 @@ from datetime import datetime
 from config import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT
 from models import Note
 from storage import load_notes, save_notes
-from utils import validate_note, confirm_delete
+from utils import validate_note, confirm_delete, filter_notes_by_query
 from ui import components
 from ui.components import get_tab_label
-from ui.handlers import setup_text_handlers, get_text_content, clear_text
+from ui.handlers import setup_text_handlers, get_text_content, clear_text, setup_search_handler
 from ui.tab_handlers import TabHoverHandler
 
 ctk.set_appearance_mode("dark")
@@ -47,6 +47,7 @@ class DesktopApp:
         )
         self.notes_label, _ = components.create_labels(self.root, len(self.notes))
         self.update_clear_button()
+        self.setup_search()
     
     def setup_tab_hover(self):
         """Setup hover events for tab context menu"""
@@ -70,6 +71,11 @@ class DesktopApp:
             self.title_input.focus()
             return "break"
         
+        def focus_search(e):
+            if hasattr(self.notebook, 'search_entry'):
+                self.notebook.search_entry.focus()
+            return "break"
+        
         self.root.bind("<Control-s>", save_shortcut)
         self.root.bind("<Command-s>", save_shortcut)
         self.root.bind("<Control-n>", new_shortcut)
@@ -77,6 +83,45 @@ class DesktopApp:
         self.root.bind("<Escape>", new_shortcut)
         self.root.bind("<Control-t>", focus_title)
         self.root.bind("<Command-t>", focus_title)
+        self.root.bind("<Control-f>", focus_search)
+        self.root.bind("<Command-f>", focus_search)
+    
+    def setup_search(self):
+        """Setup search functionality"""
+        if hasattr(self.notebook, 'search_entry'):
+            def on_search_query(query):
+                filtered_notes = filter_notes_by_query(self.notes, query)
+                self._update_tabs_with_notes(filtered_notes)
+            
+            setup_search_handler(self.notebook.search_entry, on_search_query)
+    
+    def _update_tabs_with_notes(self, notes):
+        """Update tabs with given notes list"""
+        for tab_name in list(self.notebook.tab_references.keys()):
+            try:
+                self.notebook.delete(tab_name)
+            except:
+                pass
+        
+        self.notebook.tab_references = {}
+        
+        for note in notes:
+            tab_name = get_tab_label(note)
+            tab_frame = self.notebook.add(tab_name)
+            tab_frame.note_id = note.id
+            self.notebook.tab_references[tab_name] = note.id
+        
+        if hasattr(self.notebook, '_segmented_button'):
+            def on_tab_changed(value=None):
+                selected_tab = value if value else self.notebook.get()
+                if selected_tab and selected_tab in self.notebook.tab_references:
+                    note_id = self.notebook.tab_references[selected_tab]
+                    self.on_tab_select(note_id)
+            
+            self.notebook._segmented_button.configure(command=on_tab_changed)
+        
+        if hasattr(self, 'tab_hover_handler'):
+            self.tab_hover_handler.reset()
 
     def save_note(self):
         """Save note"""
@@ -113,41 +158,7 @@ class DesktopApp:
     
     def refresh_tabs(self):
         """Refresh tabs to show all notes"""
-        # Clear all tabs
-        for tab_name in list(self.notebook.tab_references.keys()):
-            try:
-                self.notebook.delete(tab_name)
-            except:
-                pass
-        
-        # Clear tab references
-        self.notebook.tab_references = {}
-        
-        # Add all notes as tabs
-        for note in self.notes:
-            tab_name = get_tab_label(note)
-            tab_frame = self.notebook.add(tab_name)
-            tab_frame.note_id = note.id
-            self.notebook.tab_references[tab_name] = note.id
-        
-        # Rebind tab change event
-        if hasattr(self.notebook, '_on_tab_select_callback'):
-            def on_tab_changed(value=None):
-                # CustomTkinter passes the selected value as argument
-                # But we can also get it from notebook.get()
-                selected_tab = value if value else self.notebook.get()
-                if selected_tab and selected_tab in self.notebook.tab_references:
-                    note_id = self.notebook.tab_references[selected_tab]
-                    self.on_tab_select(note_id)
-            
-            self.notebook._on_tab_select_callback = on_tab_changed
-            if hasattr(self.notebook, '_segmented_button'):
-                self.notebook._segmented_button.configure(command=on_tab_changed)
-        
-        # Reset hover handler after refresh
-        if hasattr(self, 'tab_hover_handler'):
-            self.tab_hover_handler.reset()
-            # Rebind right-click events (reset() already handles rebinding)
+        self._update_tabs_with_notes(self.notes)
     
     def on_tab_select(self, note_id):
         """Handle tab selection"""

@@ -181,12 +181,24 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
     notebook_frame = ctk.CTkFrame(parent, fg_color="transparent")
     notebook_frame.pack(fill="x", padx=20, pady=10)
     
+    header_frame = ctk.CTkFrame(notebook_frame, fg_color="transparent")
+    header_frame.pack(fill="x", pady=(0, 10))
+    
     tabs_label = ctk.CTkLabel(
-        notebook_frame,
+        header_frame,
         text="📑 Saved Notes",
         font=("Arial", 14, "bold")
     )
-    tabs_label.pack(anchor="w", pady=(0, 10))
+    tabs_label.pack(side="left")
+    
+    search_entry = ctk.CTkEntry(
+        header_frame,
+        placeholder_text="🔍 Ara...",
+        width=200,
+        height=30,
+        font=("Arial", 11)
+    )
+    search_entry.pack(side="right")
     
     tabs_container = ctk.CTkFrame(notebook_frame, fg_color="transparent")
     tabs_container.pack(fill="x", pady=(0, 10))
@@ -231,6 +243,7 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
         if hasattr(tabview, '_segmented_button'):
             tabview._segmented_button.configure(command=on_tab_changed)
     
+    tabview.search_entry = search_entry
     return tabview
 
 

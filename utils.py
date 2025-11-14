@@ -41,3 +41,29 @@ def confirm_delete(parent, note_title: str = None) -> bool:
     )
     return result
 
+
+def filter_notes_by_query(notes, query: str):
+    """
+    Filter notes by search query
+    
+    Args:
+        notes: List of Note objects
+        query: Search query string
+    
+    Returns:
+        List of filtered Note objects
+    """
+    if not query or not query.strip():
+        return notes
+    
+    query_lower = query.strip().lower()
+    filtered = []
+    
+    for note in notes:
+        title_match = note.title.lower() if note.title else ""
+        content_match = note.content.lower() if note.content else ""
+        if query_lower in title_match or query_lower in content_match:
+            filtered.append(note)
+    
+    return filtered
+
