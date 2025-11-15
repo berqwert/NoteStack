@@ -101,6 +101,16 @@
 - Satır başlarında otomatik numaralandırma (1, 2, 3...)
 - Hizalama ve formatlama seçenekleri
 
+### Dosya compression
+- Dosyaların boyutları olabildiğince compressed olacak hashlenirken
+- JSON dosyalarını sıkıştırarak saklama
+- Disk alanı tasarrufu
+
+### Clipboard paste detection
+- Clipboard'da bir öğe varsa ve sadece text ise yapıştırmak isteyip istemediğin sorulacak
+- Text area'ya odaklanıldığında clipboard kontrolü
+- Kullanıcıya yapıştırma onayı sorulması
+
 ## Gelecek (Uzun Vadeli)
 
 ### Login/Logout sistemi
