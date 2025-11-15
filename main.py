@@ -8,7 +8,7 @@ from utils import validate_note, confirm_delete, filter_notes_by_query
 from ui import components
 from ui.components import get_tab_label
 from ui.handlers import setup_text_handlers, get_text_content, clear_text, setup_search_handler
-from ui.tab_handlers import TabHoverHandler
+from ui.tab_handlers import TabHoverHandler, highlight_matching_tabs
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -90,8 +90,12 @@ class DesktopApp:
         """Setup search functionality"""
         if hasattr(self.notebook, 'search_entry'):
             def on_search_query(query):
-                filtered_notes = filter_notes_by_query(self.notes, query)
-                self._update_tabs_with_notes(filtered_notes)
+                if query.strip():
+                    filtered_notes = filter_notes_by_query(self.notes, query)
+                    matched_note_ids = {note.id for note in filtered_notes}
+                    highlight_matching_tabs(self.notebook, self.notebook.tab_references, matched_note_ids)
+                else:
+                    highlight_matching_tabs(self.notebook, self.notebook.tab_references, set())
             
             setup_search_handler(self.notebook.search_entry, on_search_query)
     
@@ -104,9 +108,19 @@ class DesktopApp:
                 pass
         
         self.notebook.tab_references = {}
+        used_tab_names = set()
         
         for note in notes:
-            tab_name = get_tab_label(note)
+            base_tab_name = get_tab_label(note)
+            tab_name = base_tab_name
+            
+            # Make tab name unique if duplicate
+            counter = 1
+            while tab_name in used_tab_names:
+                tab_name = f"{base_tab_name} ({counter})"
+                counter += 1
+            
+            used_tab_names.add(tab_name)
             tab_frame = self.notebook.add(tab_name)
             tab_frame.note_id = note.id
             self.notebook.tab_references[tab_name] = note.id
@@ -122,6 +136,8 @@ class DesktopApp:
         
         if hasattr(self, 'tab_hover_handler'):
             self.tab_hover_handler.reset()
+        
+        highlight_matching_tabs(self.notebook, self.notebook.tab_references, set())
 
     def save_note(self):
         """Save note"""

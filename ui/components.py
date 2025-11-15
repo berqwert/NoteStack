@@ -222,9 +222,19 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
     
     # Store tab references with note_id
     tabview.tab_references = {}
+    used_tab_names = set()
     
     for note in notes:
-        tab_name = get_tab_label(note)
+        base_tab_name = get_tab_label(note)
+        tab_name = base_tab_name
+        
+        # Make tab name unique if duplicate
+        counter = 1
+        while tab_name in used_tab_names:
+            tab_name = f"{base_tab_name} ({counter})"
+            counter += 1
+        
+        used_tab_names.add(tab_name)
         tab_frame = tabview.add(tab_name)
         tab_frame.note_id = note.id
         tabview.tab_references[tab_name] = note.id

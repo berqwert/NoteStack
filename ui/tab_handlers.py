@@ -249,3 +249,28 @@ class TabHoverHandler:
         
         # Recreate overlays after refresh
         self._create_overlays()
+
+
+def highlight_matching_tabs(tabview, tab_references, matched_note_ids):
+    """
+    Highlight matching tabs in red, keep others normal
+    
+    Args:
+        tabview: CTkTabview widget
+        tab_references: Dictionary mapping tab names to note IDs
+        matched_note_ids: Set of note IDs that match the search query
+    """
+    if not hasattr(tabview, '_segmented_button'):
+        return
+    
+    seg_button = tabview._segmented_button
+    if not hasattr(seg_button, '_buttons_dict'):
+        return
+    
+    for tab_name, note_id in tab_references.items():
+        if tab_name in seg_button._buttons_dict:
+            button = seg_button._buttons_dict[tab_name]
+            if note_id in matched_note_ids:
+                button.configure(fg_color="#FF3B30", hover_color="#CC2E24")
+            else:
+                button.configure(fg_color=["#3B3B3B", "#2B2B2B"], hover_color=["#4A4A4A", "#3A3A3A"])
