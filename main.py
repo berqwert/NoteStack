@@ -113,6 +113,18 @@ class DesktopApp:
         reordered_notes = matched_notes + unmatched_notes
         self._update_tabs_with_notes(reordered_notes)
         highlight_matching_tabs(self.notebook, self.notebook.tab_references, matched_note_ids)
+        
+        if matched_notes:
+            first_matched_note = matched_notes[0]
+            actual_tab_name = None
+            for t_name, note_id in self.notebook.tab_references.items():
+                if note_id == first_matched_note.id:
+                    actual_tab_name = t_name
+                    break
+            
+            if actual_tab_name:
+                self.notebook.set(actual_tab_name)
+                self.on_tab_select(first_matched_note.id)
     
     def _update_tabs_with_notes(self, notes):
         """Update tabs with given notes list"""
