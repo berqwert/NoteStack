@@ -93,11 +93,26 @@ class DesktopApp:
                 if query.strip():
                     filtered_notes = filter_notes_by_query(self.notes, query)
                     matched_note_ids = {note.id for note in filtered_notes}
-                    highlight_matching_tabs(self.notebook, self.notebook.tab_references, matched_note_ids)
+                    self._reorder_tabs_with_matches(matched_note_ids)
                 else:
-                    highlight_matching_tabs(self.notebook, self.notebook.tab_references, set())
+                    self._update_tabs_with_notes(self.notes)
             
             setup_search_handler(self.notebook.search_entry, on_search_query)
+    
+    def _reorder_tabs_with_matches(self, matched_note_ids):
+        """Reorder tabs: matched ones first, then select first matched tab"""
+        matched_notes = []
+        unmatched_notes = []
+        
+        for note in self.notes:
+            if note.id in matched_note_ids:
+                matched_notes.append(note)
+            else:
+                unmatched_notes.append(note)
+        
+        reordered_notes = matched_notes + unmatched_notes
+        self._update_tabs_with_notes(reordered_notes)
+        highlight_matching_tabs(self.notebook, self.notebook.tab_references, matched_note_ids)
     
     def _update_tabs_with_notes(self, notes):
         """Update tabs with given notes list"""
@@ -114,7 +129,6 @@ class DesktopApp:
             base_tab_name = get_tab_label(note)
             tab_name = base_tab_name
             
-            # Make tab name unique if duplicate
             counter = 1
             while tab_name in used_tab_names:
                 tab_name = f"{base_tab_name} ({counter})"
