@@ -8,22 +8,22 @@
 - `hovered_tab_index` doğru reset edilmiyor olabilir
 - Delete sonrası state temizliği kontrol edilmeli
 
-### Yeni not tuşu ekle
+### Yeni not tuşu ekle (Yapıldı)
 - Yeni not oluşturmak için buton ekle
 - Tıklanınca input'ları temizlesin ve yeni not moduna geçsin
 - Mevcut not düzenleme modundan çıksın
 
-### Textbox'ı resizable yapma
+### Textbox'ı resizable yapma (Yapıldı)
 - Text area'yı pencere boyutuna göre resize edilebilir yap
 - Kullanıcı pencereyi büyütüp küçülttüğünde textbox da büyüyüp küçülsün
 - `fill="both", expand=True` kullanarak frame'i resizable yap
 
-### Tab'lara X butonu ekleme
+### Tab'lara X butonu ekleme (Yapıldı)
 - Her tab'ın sağına küçük X butonu ekle
 - Tıklanınca notu silecek (onay mesajı ile)
 - Tab'ı kaldır ve notes listesinden sil
 
-### Temizle/Kaldır butonu mantığı
+### Temizle/Kaldır butonu mantığı (Yapıldı)
 **Öneri: Dinamik buton yaklaşımı**
 - Eğer bir not düzenleniyorsa (`current_note_id` varsa): Buton "Kaldır" olsun ve notu silsin
 - Eğer yeni not yazılıyorsa (`current_note_id` yoksa): Buton "Temizle" olsun ve sadece input'ları temizlesin
@@ -37,7 +37,7 @@
 
 ## Orta Öncelik
 
-### CustomTkinter'a geçiş
+### CustomTkinter'a geçiş (Yapıldı)
 - Modern görünüm için CustomTkinter'a geçilebilir
 - Tüm widget'ları değiştirmek gerekir (tk.Button → ctk.CTkButton, vb.)
 - Style ayarlarını güncellemek gerekir
@@ -81,7 +81,7 @@
 - Mobil ve desktop arasında veri senkronizasyonu
 - Cloud storage entegrasyonu (isteğe bağlı)
 
-### Notlara fotoğraf yükleme
+### Notlara fotoğraf yükleme (İptal Edilebilir)
 - Her nota fotoğraf ekleme seçeneği
 - Fotoğrafları not içeriğine gömme veya ek olarak saklama
 - Fotoğraf görüntüleme ve düzenleme
