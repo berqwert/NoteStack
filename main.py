@@ -48,6 +48,15 @@ class DesktopApp:
         self.notes_label, _ = components.create_labels(self.root, len(self.notes))
         self.update_clear_button()
         self.setup_search()
+        
+        # Automatically select first note on startup if notes exist
+        if self.notes:
+            first_note = self.notes[0]
+            for tab_name, note_id in self.notebook.tab_references.items():
+                if note_id == first_note.id:
+                    self.notebook.set(tab_name)
+                    self.on_tab_select(first_note.id)
+                    break
     
     def setup_tab_hover(self):
         """Setup hover events for tab context menu"""
