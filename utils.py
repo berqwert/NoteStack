@@ -1,6 +1,6 @@
 """Utility functions for the desktop app"""
 from datetime import datetime
-from tkinter import messagebox
+from ui.dialogs import show_confirm
 
 def format_date(date_string):
     """Format date string to readable format"""
@@ -23,7 +23,7 @@ def confirm_delete(parent, note_title: str = None) -> bool:
     Show confirmation dialog for deleting a note
     
     Args:
-        parent: Parent window (tkinter root)
+        parent: Parent window (CTk root)
         note_title: Title of the note to delete (optional)
     
     Returns:
@@ -34,12 +34,7 @@ def confirm_delete(parent, note_title: str = None) -> bool:
     else:
         message = "Bu notu silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz."
     
-    result = messagebox.askyesno(
-        title="Not Sil",
-        message=message,
-        icon="warning"
-    )
-    return result
+    return show_confirm(parent, "Not Sil", message)
 
 
 def filter_notes_by_query(notes, query: str):
