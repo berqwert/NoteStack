@@ -109,9 +109,9 @@ def create_buttons(parent, save_command, clear_command) -> tuple[ctk.CTkFrame, c
     
     save_btn = ctk.CTkButton(
         button_frame,
-        text="💾 Kaydet",
+        text="💾 Kaydet (Ctrl+S)",
         command=save_command,
-        width=150,
+        width=180,
         height=40,
         fg_color="#007AFF",
         hover_color="#0056CC",
@@ -209,9 +209,9 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
     if new_note_command:
         new_btn = ctk.CTkButton(
             tabs_container,
-            text="➕ New Note",
+            text="➕ New Note (Ctrl+N)",
             command=new_note_command,
-            width=120,
+            width=160,
             height=35,
             fg_color="#34C759",
             hover_color="#28A745",
