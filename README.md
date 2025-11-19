@@ -26,23 +26,6 @@ Modern ve kullanıcı dostu Python masaüstü not alma uygulaması. CustomTkinte
 - Python 3.10 veya üzeri
 - pip (Python paket yöneticisi)
 
-### Adımlar
-
-1. Projeyi klonlayın veya indirin:
-```bash
-git clone https://github.com/berqwert/NoteStack.git
-cd NoteStack
-```
-
-2. Gerekli paketleri yükleyin:
-```bash
-pip install -r requirements.txt
-```
-
-3. Uygulamayı çalıştırın:
-```bash
-python main.py
-```
 
 ## Proje Yapısı
 
