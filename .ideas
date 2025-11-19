@@ -8,6 +8,11 @@
 - `hovered_tab_index` doğru reset edilmiyor olabilir
 - Delete sonrası state temizliği kontrol edilmeli
 
+### Keyboard shortcuts don't work right - needs improvement
+- Keyboard shortcuts have issues and need to be fixed/improved
+- Some shortcuts may not work correctly in certain contexts
+- Needs proper event handling and focus management
+
 ### Yeni not tuşu ekle (Yapıldı)
 - Yeni not oluşturmak için buton ekle
 - Tıklanınca input'ları temizlesin ve yeni not moduna geçsin

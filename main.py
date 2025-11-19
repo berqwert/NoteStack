@@ -68,32 +68,33 @@ class DesktopApp:
     
     def setup_keyboard_shortcuts(self):
         """Setup keyboard shortcuts"""
-        def save_shortcut(e):
-            self.save_note()
-            return "break"
-        
-        def new_shortcut(e):
-            self.new_note()
-            return "break"
-        
-        def focus_title(e):
-            self.title_input.focus()
-            return "break"
-        
-        def focus_search(e):
-            if hasattr(self.notebook, 'search_entry'):
-                self.notebook.search_entry.focus()
-            return "break"
-        
-        self.root.bind("<Control-s>", save_shortcut)
-        self.root.bind("<Command-s>", save_shortcut)
-        self.root.bind("<Control-n>", new_shortcut)
-        self.root.bind("<Command-n>", new_shortcut)
-        self.root.bind("<Escape>", new_shortcut)
-        self.root.bind("<Control-t>", focus_title)
-        self.root.bind("<Command-t>", focus_title)
-        self.root.bind("<Control-f>", focus_search)
-        self.root.bind("<Command-f>", focus_search)
+        # def save_shortcut(e):
+        #     self.save_note()
+        #     return "break"
+        # 
+        # def new_shortcut(e):
+        #     self.new_note()
+        #     return "break"
+        # 
+        # def focus_title(e):
+        #     self.title_input.focus()
+        #     return "break"
+        # 
+        # def focus_search(e):
+        #     if hasattr(self.notebook, 'search_entry'):
+        #         self.notebook.search_entry.focus()
+        #     return "break"
+        # 
+        # self.root.bind("<Control-s>", save_shortcut)
+        # self.root.bind("<Command-s>", save_shortcut)
+        # self.root.bind("<Control-n>", new_shortcut)
+        # self.root.bind("<Command-n>", new_shortcut)
+        # self.root.bind("<Escape>", new_shortcut)
+        # self.root.bind("<Control-t>", focus_title)
+        # self.root.bind("<Command-t>", focus_title)
+        # self.root.bind("<Control-f>", focus_search)
+        # self.root.bind("<Command-f>", focus_search)
+        pass
     
     def setup_search(self):
         """Setup search functionality"""
