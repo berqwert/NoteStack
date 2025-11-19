@@ -1,25 +1,25 @@
-# 📝 NoteStack
+# NoteStack
 
 Modern ve kullanıcı dostu Python masaüstü not alma uygulaması. CustomTkinter ile geliştirilmiş şık ve kullanışlı bir arayüze sahiptir.
 
-## ✨ Özellikler
+## Özellikler
 
-- 🎨 **Modern Arayüz**: CustomTkinter ile geliştirilmiş dark theme
-- 📑 **Tab Yönetimi**: Notlarınızı tab'lar halinde görüntüleyin ve yönetin
-- 🔍 **Arama**: Notlarınızda hızlıca arama yapın
-- ⌨️ **Klavye Kısayolları**: 
+- **Modern Arayüz**: CustomTkinter ile geliştirilmiş dark theme
+- **Tab Yönetimi**: Notlarınızı tab'lar halinde görüntüleyin ve yönetin
+- **Arama**: Notlarınızda hızlıca arama yapın
+- **Klavye Kısayolları**: 
   - `Ctrl+S` / `Cmd+S`: Notu kaydet
   - `Ctrl+N` / `Cmd+N`: Yeni not oluştur
   - `Ctrl+T` / `Cmd+T`: Başlık alanına odaklan
   - `Ctrl+F` / `Cmd+F`: Arama alanına odaklan
   - `Escape`: Yeni not moduna geç
-- 🗑️ **Akıllı Silme**: Not düzenlerken "Kaldır", yeni not yazarken "Temizle"
-- 💬 **Modern Dialog'lar**: Onay, bilgi, uyarı ve hata mesajları için özel dialog'lar
-- 💾 **Otomatik Kayıt**: Notlarınız JSON formatında otomatik olarak kaydedilir
-- ✅ **Validasyon**: Not içeriği ve uzunluk kontrolü
-- 🎯 **Akıllı Başlangıç**: Uygulama açıldığında ilk notu otomatik seçer
+- **Akıllı Silme**: Not düzenlerken "Kaldır", yeni not yazarken "Temizle"
+- **Modern Dialog'lar**: Onay, bilgi, uyarı ve hata mesajları için özel dialog'lar
+- **Otomatik Kayıt**: Notlarınız JSON formatında otomatik olarak kaydedilir
+- **Validasyon**: Not içeriği ve uzunluk kontrolü
+- **Akıllı Başlangıç**: Uygulama açıldığında ilk notu otomatik seçer
 
-## 🚀 Kurulum
+## Kurulum
 
 ### Gereksinimler
 
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## 📁 Proje Yapısı
+## Proje Yapısı
 
 ```
 NoteStack/
@@ -63,22 +63,22 @@ NoteStack/
 └── requirements.txt     # Python bağımlılıkları
 ```
 
-## 🛠️ Teknolojiler
+## Teknolojiler
 
 - **Python 3.10+**: Programlama dili
 - **CustomTkinter**: Modern UI framework
 - **Pillow**: Görsel işleme (CustomTkinter bağımlılığı)
 - **JSON**: Veri saklama formatı
 
-## 📝 Kullanım
+## Kullanım
 
-1. **Yeni Not Oluşturma**: "➕ New Note" butonuna tıklayın veya `Ctrl+N` tuşlarına basın
-2. **Not Kaydetme**: "💾 Kaydet" butonuna tıklayın veya `Ctrl+S` tuşlarına basın
+1. **Yeni Not Oluşturma**: "New Note" butonuna tıklayın veya `Ctrl+N` tuşlarına basın
+2. **Not Kaydetme**: "Kaydet" butonuna tıklayın veya `Ctrl+S` tuşlarına basın
 3. **Not Düzenleme**: Tab'lardan bir not seçin ve içeriğini düzenleyin
 4. **Not Silme**: Tab üzerine gelin ve çıkan X butonuna tıklayın
 5. **Arama**: Üst kısımdaki arama kutusuna yazın
 
-## 🔧 Yapılandırma
+## Yapılandırma
 
 `config.py` dosyasından aşağıdaki ayarları değiştirebilirsiniz:
 
@@ -86,14 +86,14 @@ NoteStack/
 - `MAX_NOTE_LENGTH`: Maksimum not uzunluğu
 - `DATA_DIR`: Veri klasörü yolu
 
-## 📄 Lisans
+## Lisans
 
 MIT License - Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-## 🤝 Katkıda Bulunma
+## Katkıda Bulunma
 
 Katkılarınızı bekliyoruz! Lütfen önce bir issue açın veya pull request gönderin.
 
-## 📧 İletişim
+## İletişim
 
 Sorularınız veya önerileriniz için issue açabilirsiniz.

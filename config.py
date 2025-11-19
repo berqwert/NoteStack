@@ -1,7 +1,7 @@
 """Configuration settings for the app"""
 
 APP_NAME = "NoteStack"
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 800
 DATA_DIR = "data"
