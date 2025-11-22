@@ -51,7 +51,7 @@ def create_title_input(parent) -> ctk.CTkEntry:
         font=("Arial", 12)
     )
     title_label.pack(pady=(10, 5), padx=20, anchor="w")
-    
+
     title_input = ctk.CTkEntry(
         parent,
         font=("Arial", 14),
