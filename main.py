@@ -52,11 +52,14 @@ class DesktopApp:
         # Automatically select first note on startup if notes exist
         if self.notes:
             first_note = self.notes[0]
-            for tab_name, note_id in self.notebook.tab_references.items():
+            tab_name = None
+            for t_name, note_id in self.notebook.tab_references.items():
                 if note_id == first_note.id:
-                    self.notebook.set(tab_name)
-                    self.on_tab_select(first_note.id)
+                    tab_name = t_name
                     break
+            if tab_name:
+                self.notebook.set(tab_name)
+                self.on_tab_select(first_note.id)
     
     def setup_tab_hover(self):
         """Setup hover events for tab context menu"""
@@ -131,7 +134,6 @@ class DesktopApp:
                 if note_id == first_matched_note.id:
                     actual_tab_name = t_name
                     break
-            
             if actual_tab_name:
                 self.notebook.set(actual_tab_name)
                 self.on_tab_select(first_matched_note.id)
@@ -181,32 +183,29 @@ class DesktopApp:
         content = get_text_content(self.text_input)
         is_valid, error_msg = validate_note(content)
         
-        if is_valid:
-            if self.current_note_id:
-                note = next((n for n in self.notes if n.id == self.current_note_id), None)
-                if note:
-                    note.title = title
-                    note.content = content
-                    note.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    save_notes(self.notes)
-                    self.notes_label.configure(text=f"Not güncellendi ✓")
-                    self.current_note_id = None
-                    self.title_input.delete(0, "end")
-                    clear_text(self.text_input)
-                    self.refresh_tabs()
-                    self.update_clear_button()
-            else:
-                new_note = Note(content=content, title=title)
-                new_note.id = len(self.notes) + 1
-                self.notes.append(new_note)
-                save_notes(self.notes)
-                self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
-                self.title_input.delete(0, "end")
-                clear_text(self.text_input)
-                self.refresh_tabs()
-                self.update_clear_button()
-        else:
+        if not is_valid:
             self.notes_label.configure(text=f"❌ {error_msg}")
+            return
+        
+        if self.current_note_id:
+            note = next((n for n in self.notes if n.id == self.current_note_id), None)
+            if note:
+                note.title = title
+                note.content = content
+                note.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                save_notes(self.notes)
+                self.notes_label.configure(text=f"Not güncellendi ✓")
+        else:
+            new_note = Note(content=content, title=title)
+            new_note.id = len(self.notes) + 1
+            self.notes.append(new_note)
+            save_notes(self.notes)
+            self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
+            self.clear_inputs()
+            clear_text(self.text_input)
+        
+        self.refresh_tabs()
+        self.update_clear_button()
     
     def refresh_tabs(self):
         """Refresh tabs to show all notes"""
@@ -232,34 +231,26 @@ class DesktopApp:
     def clear_note(self):
         """Clear note or delete if editing existing note"""
         if self.current_note_id:
-            # If editing a note, delete it
             self.delete_note(self.current_note_id)
         else:
-            # If new note, just clear inputs
             self.current_note_id = None
-            self.title_input.delete(0, "end")
+            self.clear_inputs()
             clear_text(self.text_input)
             self.update_clear_button()
     
     def update_clear_button(self):
         """Update clear button text and appearance based on current state"""
-        if self.current_note_id:
-            self.clear_btn.configure(
-                text="🗑️ Kaldır",
-                fg_color="#FF3B30",
-                hover_color="#CC2E24"
-            )
-        else:
-            self.clear_btn.configure(
-                text="🗑️ Temizle",
-                fg_color="#FF3B30",
-                hover_color="#CC2E24"
-            )
+        text = "🗑️ Kaldır" if self.current_note_id else "🗑️ Temizle"
+        self.clear_btn.configure(
+            text=text,
+            fg_color="#FF3B30",
+            hover_color="#CC2E24"
+        )
     
     def new_note(self):
         """Create new note - clear inputs and reset state"""
         self.current_note_id = None
-        self.title_input.delete(0, "end")
+        self.clear_inputs()
         clear_text(self.text_input)
         self.notes_label.configure(text=f"Toplam {len(self.notes)} not")
         self.update_clear_button()
@@ -277,7 +268,7 @@ class DesktopApp:
             
             if self.current_note_id == note_id:
                 self.current_note_id = None
-                self.title_input.delete(0, "end")
+                self.clear_inputs()
                 clear_text(self.text_input)
                 self.update_clear_button()
             
