@@ -3,12 +3,7 @@ from tkinter import ttk
 
 
 def create_options_button(parent) -> ctk.CTkButton:
-    """
-    Create options button in top right
-    
-    Returns:
-        options_button
-    """
+    """Create options button in top right"""
     top_frame = ctk.CTkFrame(parent, fg_color="transparent")
     top_frame.pack(fill="x", pady=10, padx=10)
     
@@ -39,19 +34,14 @@ def create_title(parent) -> ctk.CTkLabel:
 
 
 def create_title_input(parent) -> ctk.CTkEntry:
-    """
-    Create Entry widget for note title
-    
-    Returns:
-        title_input Entry widget
-    """
+    """Create Entry widget for note title"""
     title_label = ctk.CTkLabel(
         parent,
         text="Başlık:",
         font=("Arial", 12)
     )
     title_label.pack(pady=(10, 5), padx=20, anchor="w")
-    
+
     title_input = ctk.CTkEntry(
         parent,
         font=("Arial", 14),
@@ -66,12 +56,7 @@ def create_title_input(parent) -> ctk.CTkEntry:
 
 
 def create_text_area(parent) -> tuple[ctk.CTkTextbox, ctk.CTkFrame]:
-    """
-    Create text area
-    
-    Returns:
-        (text_input, text_frame) tuple
-    """
+    """Create text area"""
     text_frame = ctk.CTkFrame(parent, fg_color="transparent")
     text_frame.pack(pady=10, padx=20, fill="both", expand=True)
     
@@ -93,17 +78,7 @@ def create_text_area(parent) -> tuple[ctk.CTkTextbox, ctk.CTkFrame]:
 
 
 def create_buttons(parent, save_command, clear_command) -> tuple[ctk.CTkFrame, ctk.CTkButton]:
-    """
-    Create buttons frame
-    
-    Args:
-        parent: Parent widget
-        save_command: Save button command
-        clear_command: Clear button command
-    
-    Returns:
-        (button_frame, clear_btn) tuple - clear_btn reference for dynamic updates
-    """
+    """Create buttons frame"""
     button_frame = ctk.CTkFrame(parent, fg_color="transparent")
     button_frame.pack(pady=10)
     
@@ -137,16 +112,7 @@ def create_buttons(parent, save_command, clear_command) -> tuple[ctk.CTkFrame, c
 
 
 def create_labels(parent, notes_count: int) -> tuple[ctk.CTkLabel, ctk.CTkLabel]:
-    """
-    Create labels (note list and footer)
-    
-    Args:
-        parent: Parent widget
-        notes_count: Number of notes
-    
-    Returns:
-        (notes_label, footer) tuple
-    """
+    """Create labels (note list and footer)"""
     notes_label = ctk.CTkLabel(
         parent,
         text=f"Toplam {notes_count} not",
@@ -166,18 +132,7 @@ def create_labels(parent, notes_count: int) -> tuple[ctk.CTkLabel, ctk.CTkLabel]
 
 
 def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -> ctk.CTkTabview:
-    """
-    Create tabs section to display notes
-    
-    Args:
-        parent: Parent widget
-        notes: List of Note objects
-        on_tab_select: Callback function when tab is selected (receives note_id)
-        new_note_command: New note button command (optional)
-    
-    Returns:
-        tabview widget
-    """
+    """Create tabs section to display notes"""
     notebook_frame = ctk.CTkFrame(parent, fg_color="transparent")
     notebook_frame.pack(fill="x", padx=20, pady=10)
     
@@ -191,20 +146,37 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
     )
     tabs_label.pack(side="left")
     
+    search_frame = ctk.CTkFrame(header_frame, fg_color="transparent")
+    search_frame.pack(side="right")
+    
     search_entry = ctk.CTkEntry(
-        header_frame,
+        search_frame,
         placeholder_text="🔍 Ara...",
         width=200,
         height=30,
         font=("Arial", 11)
     )
-    search_entry.pack(side="right")
+    search_entry.pack(side="left")
+    
+    clear_filter_btn = ctk.CTkButton(
+        search_frame,
+        text="✕",
+        width=30,
+        height=30,
+        fg_color="#2a2a2a",
+        hover_color="#3a3a3a",
+        font=("Arial", 12, "bold"),
+        corner_radius=5
+    )
+    clear_filter_btn.pack(side="left", padx=(5, 0))
     
     tabs_container = ctk.CTkFrame(notebook_frame, fg_color="transparent")
     tabs_container.pack(fill="x", pady=(0, 10))
     
     tabview = ctk.CTkTabview(tabs_container, height=50)
     tabview.pack(side="left", fill="x", expand=True)
+    
+    tabview.clear_filter_btn = clear_filter_btn
     
     if new_note_command:
         new_btn = ctk.CTkButton(
@@ -228,7 +200,6 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
         base_tab_name = get_tab_label(note)
         tab_name = base_tab_name
         
-        # Make tab name unique if duplicate
         counter = 1
         while tab_name in used_tab_names:
             tab_name = f"{base_tab_name} ({counter})"
@@ -241,8 +212,6 @@ def create_note_tabs(parent, notes, on_tab_select=None, new_note_command=None) -
     
     if on_tab_select:
         def on_tab_changed(value=None):
-            # CustomTkinter passes the selected value as argument
-            # But we can also get it from tabview.get()
             selected_tab = value if value else tabview.get()
             if selected_tab and selected_tab in tabview.tab_references:
                 note_id = tabview.tab_references[selected_tab]
