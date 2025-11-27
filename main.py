@@ -1,14 +1,14 @@
 import customtkinter as ctk
 from datetime import datetime
 
-from config import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT
+from config import APP_NAME, WINDOW_HEIGHT, WINDOW_WIDTH
 from models import Note
 from storage import load_notes, save_notes
-from utils import validate_note, confirm_delete, filter_notes_by_query
 from ui import components
 from ui.components import get_tab_label
-from ui.handlers import setup_text_handlers, get_text_content, clear_text, setup_search_handler
+from ui.handlers import clear_text, get_text_content, setup_search_handler, setup_text_handlers
 from ui.tab_handlers import TabHoverHandler, highlight_matching_tabs
+from utils import confirm_delete, filter_notes_by_query, validate_note
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -19,7 +19,7 @@ class DesktopApp:
         self.root = ctk.CTk()
         self.root.title(APP_NAME)
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
-        self.root.minsize(600, 400)  # Minimum window size
+        self.root.minsize(600, 400)
         
         self.notes = load_notes()
         self.current_note_id = None
@@ -49,14 +49,16 @@ class DesktopApp:
         self.update_clear_button()
         self.setup_search()
         
-        # Automatically select first note on startup if notes exist
         if self.notes:
             first_note = self.notes[0]
-            for tab_name, note_id in self.notebook.tab_references.items():
+            tab_name = None
+            for t_name, note_id in self.notebook.tab_references.items():
                 if note_id == first_note.id:
-                    self.notebook.set(tab_name)
-                    self.on_tab_select(first_note.id)
+                    tab_name = t_name
                     break
+            if tab_name:
+                self.notebook.set(tab_name)
+                self.on_tab_select(first_note.id)
     
     def setup_tab_hover(self):
         """Setup hover events for tab context menu"""
@@ -108,6 +110,14 @@ class DesktopApp:
                     self._update_tabs_with_notes(self.notes)
             
             setup_search_handler(self.notebook.search_entry, on_search_query)
+            
+            if hasattr(self.notebook, 'clear_filter_btn'):
+                def clear_filter():
+                    self.notebook.search_entry.delete(0, "end")
+                    self._update_tabs_with_notes(self.notes)
+                    highlight_matching_tabs(self.notebook, self.notebook.tab_references, set())
+                
+                self.notebook.clear_filter_btn.configure(command=clear_filter)
     
     def _reorder_tabs_with_matches(self, matched_note_ids):
         """Reorder tabs: matched ones first, then select first matched tab"""
@@ -131,7 +141,6 @@ class DesktopApp:
                 if note_id == first_matched_note.id:
                     actual_tab_name = t_name
                     break
-            
             if actual_tab_name:
                 self.notebook.set(actual_tab_name)
                 self.on_tab_select(first_matched_note.id)
@@ -174,43 +183,61 @@ class DesktopApp:
             self.tab_hover_handler.reset()
         
         highlight_matching_tabs(self.notebook, self.notebook.tab_references, set())
-
+    
     def save_note(self):
         """Save note"""
         title = self.title_input.get().strip()
         content = get_text_content(self.text_input)
         is_valid, error_msg = validate_note(content)
         
-        if is_valid:
-            if self.current_note_id:
-                note = next((n for n in self.notes if n.id == self.current_note_id), None)
-                if note:
-                    note.title = title
-                    note.content = content
-                    note.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    save_notes(self.notes)
-                    self.notes_label.configure(text=f"Not güncellendi ✓")
-                    self.current_note_id = None
-                    self.title_input.delete(0, "end")
-                    clear_text(self.text_input)
-                    self.refresh_tabs()
-                    self.update_clear_button()
-            else:
-                new_note = Note(content=content, title=title)
-                new_note.id = len(self.notes) + 1
-                self.notes.append(new_note)
+        if not is_valid:
+            self.notes_label.configure(text=f"❌ {error_msg}")
+            return
+        
+        if self.current_note_id:
+            note = next((n for n in self.notes if n.id == self.current_note_id), None)
+            if note:
+                note.title = title
+                note.content = content
+                note.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 save_notes(self.notes)
-                self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
-                self.title_input.delete(0, "end")
-                clear_text(self.text_input)
+                self.notes_label.configure(text=f"Not güncellendi ✓")
                 self.refresh_tabs()
+                self._restore_current_tab_selection()
+                self._restore_search_highlights()
                 self.update_clear_button()
         else:
-            self.notes_label.configure(text=f"❌ {error_msg}")
+            new_note = Note(content=content, title=title)
+            new_note.id = len(self.notes) + 1
+            self.notes.append(new_note)
+            save_notes(self.notes)
+            self.notes_label.configure(text=f"Toplam {len(self.notes)} not ✓")
+            self.clear_inputs()
+            clear_text(self.text_input)
+            self.refresh_tabs()
+            self._restore_search_highlights()
+            self.update_clear_button()
     
     def refresh_tabs(self):
         """Refresh tabs to show all notes"""
         self._update_tabs_with_notes(self.notes)
+    
+    def _restore_current_tab_selection(self):
+        """Restore the selected tab highlight after refresh"""
+        if self.current_note_id:
+            for tab_name, note_id in self.notebook.tab_references.items():
+                if note_id == self.current_note_id:
+                    self.notebook.set(tab_name)
+                    break
+    
+    def _restore_search_highlights(self):
+        """Restore search highlights if search is active"""
+        if hasattr(self.notebook, 'search_entry'):
+            query = self.notebook.search_entry.get().strip()
+            if query:
+                filtered_notes = filter_notes_by_query(self.notes, query)
+                matched_note_ids = {note.id for note in filtered_notes}
+                highlight_matching_tabs(self.notebook, self.notebook.tab_references, matched_note_ids)
     
     def on_tab_select(self, note_id):
         """Handle tab selection"""
@@ -232,34 +259,26 @@ class DesktopApp:
     def clear_note(self):
         """Clear note or delete if editing existing note"""
         if self.current_note_id:
-            # If editing a note, delete it
             self.delete_note(self.current_note_id)
         else:
-            # If new note, just clear inputs
             self.current_note_id = None
-            self.title_input.delete(0, "end")
+            self.clear_inputs()
             clear_text(self.text_input)
             self.update_clear_button()
     
     def update_clear_button(self):
         """Update clear button text and appearance based on current state"""
-        if self.current_note_id:
-            self.clear_btn.configure(
-                text="🗑️ Kaldır",
-                fg_color="#FF3B30",
-                hover_color="#CC2E24"
-            )
-        else:
-            self.clear_btn.configure(
-                text="🗑️ Temizle",
-                fg_color="#FF3B30",
-                hover_color="#CC2E24"
-            )
+        text = "🗑️ Kaldır" if self.current_note_id else "🗑️ Temizle"
+        self.clear_btn.configure(
+            text=text,
+            fg_color="#FF3B30",
+            hover_color="#CC2E24"
+        )
     
     def new_note(self):
         """Create new note - clear inputs and reset state"""
         self.current_note_id = None
-        self.title_input.delete(0, "end")
+        self.clear_inputs()
         clear_text(self.text_input)
         self.notes_label.configure(text=f"Toplam {len(self.notes)} not")
         self.update_clear_button()
@@ -277,7 +296,7 @@ class DesktopApp:
             
             if self.current_note_id == note_id:
                 self.current_note_id = None
-                self.title_input.delete(0, "end")
+                self.clear_inputs()
                 clear_text(self.text_input)
                 self.update_clear_button()
             
