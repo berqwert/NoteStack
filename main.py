@@ -101,6 +101,15 @@ class DesktopApp:
     def setup_search(self):
         """Setup search functionality"""
         if hasattr(self.notebook, 'search_entry'):
+            def update_clear_button_state():
+                """Update clear filter button state based on search entry content"""
+                if hasattr(self.notebook, 'clear_filter_btn'):
+                    query = self.notebook.search_entry.get().strip()
+                    if query:
+                        self.notebook.clear_filter_btn.configure(state="normal")
+                    else:
+                        self.notebook.clear_filter_btn.configure(state="disabled")
+            
             def on_search_query(query):
                 if query.strip():
                     filtered_notes = filter_notes_by_query(self.notes, query)
@@ -108,6 +117,7 @@ class DesktopApp:
                     self._reorder_tabs_with_matches(matched_note_ids)
                 else:
                     self._update_tabs_with_notes(self.notes)
+                update_clear_button_state()
             
             setup_search_handler(self.notebook.search_entry, on_search_query)
             
@@ -116,8 +126,10 @@ class DesktopApp:
                     self.notebook.search_entry.delete(0, "end")
                     self._update_tabs_with_notes(self.notes)
                     highlight_matching_tabs(self.notebook, self.notebook.tab_references, set())
+                    update_clear_button_state()
                 
                 self.notebook.clear_filter_btn.configure(command=clear_filter)
+                self.notebook.clear_filter_btn.configure(state="disabled")
     
     def _reorder_tabs_with_matches(self, matched_note_ids):
         """Reorder tabs: matched ones first, then select first matched tab"""
