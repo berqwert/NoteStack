@@ -40,6 +40,11 @@
 - Visibility daha karmaşık, sonra eklenebilir
 - Eğer visibility istersen: `Note` modeline `is_visible` field ekle, filtrele
 
+### Filter temizleme butonu
+- Arama/filtre kısmına küçük bir buton ekle (X veya temizle ikonu)
+- Butona tıklanınca filtreyi temizlesin ve tüm notları göstersin
+- Search entry'yi temizle ve highlight'ları sıfırla
+
 ## Orta Öncelik
 
 ### CustomTkinter'a geçiş (Yapıldı)
