@@ -1,13 +1,12 @@
 """Simple encryption utilities for note storage"""
 import os
+from pathlib import Path
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 import base64
-from config import DATA_DIR
-
-KEY_FILE = os.path.join(DATA_DIR, ".key")
+from config import KEY_FILE
 
 
 def get_or_create_key(password: str = None) -> bytes:
@@ -20,7 +19,8 @@ def get_or_create_key(password: str = None) -> bytes:
     Returns:
         Encryption key as bytes
     """
-    os.makedirs(DATA_DIR, exist_ok=True)
+    from config import DATA_DIR
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     
     if password:
         # Derive key from password
@@ -35,12 +35,12 @@ def get_or_create_key(password: str = None) -> bytes:
         key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
         return key
     
-    if os.path.exists(KEY_FILE):
-        with open(KEY_FILE, 'rb') as f:
+    if KEY_FILE.exists():
+        with KEY_FILE.open('rb') as f:
             return f.read()
     
     key = Fernet.generate_key()
-    with open(KEY_FILE, 'wb') as f:
+    with KEY_FILE.open('wb') as f:
         f.write(key)
     return key
 
