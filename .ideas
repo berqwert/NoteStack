@@ -64,10 +64,17 @@
 - Kullanıcı kendi istediği klasörü seçebilsin
 - Seçilen klasör config'de saklansın
 - Notlar yeni klasöre kaydedilsin
+- Directory değiştirmek için options'a bir yer ekle
 
 ### Warning sistemi
 - Uyarı mesajları için warning sistemi ekle
 - Örnek: Not silinirken onay mesajı, kayıt klasörü değiştirilirken uyarı vb.
+
+### Unit testler
+- Proje için unit testler yazılmalı
+- Storage, encryption, models gibi core modüller için testler
+- UI component'leri için testler
+- pytest veya unittest framework kullanılabilir
 
 ## Düşük Öncelik / Gelecek
 
